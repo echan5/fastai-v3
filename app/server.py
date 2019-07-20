@@ -9,11 +9,13 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://www.dropbox.com/s/6bgq8t6yextloqp/export.pkl?raw=1'
-export_file_name = 'export.pkl'
-
-classes = ['black', 'grizzly', 'teddys']
+export_file_url = 'https://www.dropbox.com/s/3s5ufstxq6eoxe0/stage-2.pth?dl=1'
+export_file_name = 'stage-2'
+classes = ['black', 'grizzly', 'teddy']
 path = Path(__file__).parent
+
+# export_file_url = 'https://www.dropbox.com/s/6bgq8t6yextloqp/export.pkl?raw=1'
+# export_file_name = 'export.pkl'
 
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
@@ -60,7 +62,7 @@ async def analyze(request):
     img_data = await request.form()
     img_bytes = await (img_data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
+    prediction = learn.predict(img)[0].obj
     return JSONResponse({'result': str(prediction)})
 
 
